@@ -2,18 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 电子字体库 */
+@font-face {
+  font-family: 'LXGW';
+  src: url('./assets/fonts/LXGW_Consolas_Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Electronic';
   src: url('./assets/fonts/FX-LED.ttf');
 }
 
-/* 文字渐变===>背景渐变+字体镂空 */
+*, *::before, *::after {
+  font-family: 'LXGW', 'Microsoft YaHei', sans-serif !important;
+}
+
+.font-electronic {
+  font-family: 'Electronic', monospace !important;
+}
+
 .text-gradient {
-  /* 背景渐变 ====> 从上到下 */
-  background-image: linear-gradient(to bottom, #e5e4ea, #5ea8f2);
-  /* 把元素的背景延申到文字上 */
+  background-image: linear-gradient(to bottom, #2ecc71, #f1c40f);
   -webkit-background-clip: text;
-  /* 文字的填充颜色变透明 */
   -webkit-text-fill-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb {
+  background: #00b894;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00cec9;
+}
+
+::selection {
+  background: #00b894;
+  color: #fff;
 }
