@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 新增 LXGW 霞鹜文楷等宽字体 */
 @font-face {
   font-family: 'LXGW';
   src: url('./assets/fonts/LXGW_Consolas_Medium.ttf') format('truetype');
@@ -19,16 +20,19 @@
   font-family: 'LXGW', 'Microsoft YaHei', sans-serif !important;
 }
 
+/* 为电子数字字体提供工具类 */
 .font-electronic {
   font-family: 'Electronic', monospace !important;
 }
 
+/* 原版: 渐变色为 #e5e4ea → #5ea8f2（蓝白渐变），改为 #2ecc71 → #f1c40f（绿黄渐变） */
 .text-gradient {
   background-image: linear-gradient(to bottom, #2ecc71, #f1c40f);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
+/* 原版没有自定义滚动条样式，以下全部新增 */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -45,6 +49,7 @@
   background: #00cec9;
 }
 
+/* 原版没有自定义选中高亮样式，新增绿色选中效果 */
 ::selection {
   background: #00b894;
   color: #fff;
