@@ -97,15 +97,16 @@ const renderChart = () => {
           symbolSize: 12,
         },
         lineStyle: { normal: { curveness: 0.2 } },
-        data: [
-          [{ coord: [0, 300] }, { coord: [50, 200] }],
-          [{ coord: [0, 100] }, { coord: [50, 200] }],
-          [{ coord: [50, 200] }, { coord: [100, 100] }],
-          [{ coord: [50, 200] }, { coord: [100, 300] }],
+        data: [ // 原版坐标错误，修正为与节点一致
+          [{ coord: [0, 200] }, { coord: [50, 300] }],
+          [{ coord: [0, 200] }, { coord: [50, 100] }],
+          [{ coord: [50, 100] }, { coord: [100, 150] }],
+          [{ coord: [50, 300] }, { coord: [100, 250] }],
         ],
       },
     ],
   }
+  myChart.clear()
   myChart.setOption(options)
 }
 

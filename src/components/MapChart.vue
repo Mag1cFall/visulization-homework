@@ -5,11 +5,11 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue' // 原版: 没有 watch
 import mapJson from '../assets/MapData/taiwan.json' // 原版: china.json
 import * as echarts from 'echarts'
 
-const FONT = 'LXGW, Microsoft YaHei, sans-serif' // 原版没有，新增全局字体变量
+const FONT = 'LXGW, Microsoft YaHei, sans-serif' // 自定义字体
 
 const props = defineProps({
   data: { type: Object, required: true },
@@ -37,7 +37,7 @@ const renderChart = () => {
       bottom: '0%',
       width: '80%',
       label: {
-        normal: { textStyle: { color: '#ddd', fontFamily: FONT } }, // 加入 fontFamily
+        normal: { textStyle: { color: '#ddd', fontFamily: FONT } },
         emphasis: { textStyle: { color: '#fff', fontFamily: FONT } },
       },
       symbolSize: 10,
@@ -49,13 +49,14 @@ const renderChart = () => {
       controlStyle: {
         showNextBtn: true,
         showPrevBtn: true,
-        normal: { color: '#00b894', borderColor: '#00b894' }, // 原版: 蓝色
+        normal: { color: '#00b894', borderColor: '#00b894' },
         emphasis: { color: '#00cec9', borderColor: '#00cec9' },
       },
     },
     baseOption: {
       grid: { right: '2%', top: '15%', bottom: '10%', width: '20%' },
-      tooltip: { // 加鼠标悬浮提示
+      animation: false, // 性能优化：关掉 baseOption 动画防止拖拽卡顿
+      tooltip: { // 原版没有 tooltip
         trigger: 'item',
         backgroundColor: 'rgba(10,22,40,0.9)',
         borderColor: '#00b894',
@@ -65,7 +66,7 @@ const renderChart = () => {
         show: true,
         map: 'taiwan', // 原版: 'china'
         roam: true, // 允许缩放和拖拽
-        zoom: 1, // 改为1看全景
+        zoom: 1,
         center: [120.9, 23.6], // 原版: 没有指定，默认中国中心
         label: {
           normal: { show: false },
@@ -75,7 +76,7 @@ const renderChart = () => {
           normal: {
             borderColor: 'rgba(0,184,148,0.8)', // 原版: 蓝色系
             borderWidth: 1,
-            areaColor: { // 原版: 蓝色渐变
+            areaColor: {
               type: 'radial',
               x: 0.5, y: 0.5, r: 0.5,
               colorStops: [
@@ -93,18 +94,18 @@ const renderChart = () => {
 
   props.data.voltageLevel.forEach((item, index) => {
     options.options.push({
-      backgroundColor: '#0a1628', // 原版: 类似深蓝背景
+      backgroundColor: '#0a1628',
       title: [
         {
           text: '2020-2025 台灣省資料統計', // 原版: '2019-2023'
           left: 0, top: 0,
-          textStyle: { color: '#a3e4d7', fontSize: 24, fontFamily: FONT }, // 原版: 蓝白, fontSize 30
+          textStyle: { color: '#a3e4d7', fontSize: 24, fontFamily: FONT },
         },
         {
           id: 'statistic',
-          text: item + '年資料統計情況', // 原版: '年数据统计情况'
+          text: item + '年資料統計情況',
           right: '0%', top: '4%',
-          textStyle: { color: '#ccc', fontSize: 16, fontFamily: FONT }, // 原版: fontSize 20
+          textStyle: { color: '#ccc', fontSize: 16, fontFamily: FONT },
         },
       ],
       xAxis: {
@@ -128,7 +129,7 @@ const renderChart = () => {
       series: [
         {
           type: 'bar',
-          zlevel: 1.5,
+          zlevel: 1,
           itemStyle: { normal: { color: props.data.colors[index % props.data.colors.length] } },
           data: props.data.categoryData[item]
             .sort((a, b) => a.value - b.value)
@@ -138,8 +139,8 @@ const renderChart = () => {
           type: 'effectScatter',
           coordinateSystem: 'geo',
           data: props.data.topData[item],
-          symbolSize: function (val) { return val[2] / 10 }, // 原版: / 6，改小避免北部圆圈重叠
-          rippleEffect: { brushType: 'stroke', scale: 3, period: 6 }, // 原版: 只有 brushType
+          symbolSize: function (val) { return val[2] / 10 }, // 原版: / 6，改小避免重叠
+          rippleEffect: { brushType: 'stroke', scale: 3, period: 6 },
           label: {
             normal: {
               formatter: '{b}',
@@ -161,6 +162,10 @@ const renderChart = () => {
     })
   })
 
+  myChart.clear() // 原版没有，新增清除旧数据防止残留
   myChart.setOption(options)
 }
+
+watch(() => props.data, () => { renderChart() }) // 原版没有 watch，年份切换后地图不会更新
 </script>
+

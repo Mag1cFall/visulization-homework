@@ -69,6 +69,7 @@ const renderChart = () => {
       },
     ],
   }
+  myChart.clear()
   myChart.setOption(options)
 }
 

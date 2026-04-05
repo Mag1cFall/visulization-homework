@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue' // 原版: 没有 watch
 import { CountUp } from 'countup.js'
 
 const props = defineProps({
@@ -49,13 +49,28 @@ const city6 = ref(null)
 
 const noComma = { separator: '' } // 原版没有，去掉数字中的逗号
 
+let counters = {} // 原版没有，改为保存引用以便 watch 中调用 update
+
 onMounted(() => {
-  new CountUp(totalCountTarget.value, props.data.total, noComma).start() // 原版: 没，， noComma 参数
-  new CountUp(city1.value, props.data.hb, noComma).start()
-  new CountUp(city2.value, props.data.db, noComma).start()
-  new CountUp(city3.value, props.data.hd, noComma).start()
-  new CountUp(city4.value, props.data.zn, noComma).start()
-  new CountUp(city5.value, props.data.xn, noComma).start()
-  new CountUp(city6.value, props.data.xb, noComma).start()
+  counters.total = new CountUp(totalCountTarget.value, props.data.total, noComma)
+  counters.c1 = new CountUp(city1.value, props.data.hb, noComma)
+  counters.c2 = new CountUp(city2.value, props.data.db, noComma)
+  counters.c3 = new CountUp(city3.value, props.data.hd, noComma)
+  counters.c4 = new CountUp(city4.value, props.data.zn, noComma)
+  counters.c5 = new CountUp(city5.value, props.data.xn, noComma)
+  counters.c6 = new CountUp(city6.value, props.data.xb, noComma)
+  Object.values(counters).forEach(c => c.start())
+})
+
+watch(() => props.data, () => { // 原版没有 watch，年份切换后数字不会变
+  if (!counters.total) return
+  counters.total.update(props.data.total)
+  counters.c1.update(props.data.hb)
+  counters.c2.update(props.data.db)
+  counters.c3.update(props.data.hd)
+  counters.c4.update(props.data.zn)
+  counters.c5.update(props.data.xn)
+  counters.c6.update(props.data.xb)
 })
 </script>
+

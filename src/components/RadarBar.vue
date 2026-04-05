@@ -58,6 +58,7 @@ const renderChart = () => {
       data: [{ value: props.data.risks.map((item) => item.value) }],
     },
   }
+  myChart.clear()
   myChart.setOption(options)
 }
 

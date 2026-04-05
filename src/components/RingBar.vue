@@ -103,6 +103,7 @@ const renderChart = () => {
     xAxis: [{ show: false }],
     series: getSeriesData(),
   }
+  myChart.clear()
   myChart.setOption(options)
 }
 

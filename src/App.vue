@@ -75,13 +75,16 @@ import RingBar from './components/RingBar.vue'
 import WordCloud from './components/WordCloud.vue'
 
 import { getMockTaiwanData } from './api/visualization.js' // 原版: import { getVisualization } from './api/visualization.js'
-import { ref, onMounted } from 'vue' // 原版: 只有 ref
+import { ref, onMounted, nextTick } from 'vue' // 原版: 只有 ref
 
 const data = ref(null)
 const selectedYear = ref(2025) // 原版没有
 
-const loadData = () => { // 原版: const loadData = async () => { data.value = (await getVisualization()).data }
-  data.value = getMockTaiwanData(selectedYear.value)
+const loadData = () => { // 原版: async + axios 请求后端，现在改本地 mock + nextTick 避免同时重绘卡顿
+  data.value = null
+  nextTick(() => {
+    data.value = getMockTaiwanData(selectedYear.value)
+  })
 }
 
 const handleYearChange = () => { // 原版没有
